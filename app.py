@@ -10,3 +10,6 @@ def hello():
 @app.route('/about')
 def about():
     return 'about'
+
+if __name__ == "__main__":
+    app.run(debug=True, use_reloader=True)
