@@ -8,9 +8,9 @@ def home():
     return render_template("home.html", name="mozzart", title="HOME")
 
 @views.route("/create-storie")
-def home():
-    return render_template("create_storie.html", name="mozzart", title="HOME")
+def create_storie():
+    return render_template("create_storie.html", name="mozzart", title="NEW")
 
 @views.route("/view-storie")
-def home():
-    return render_template("view_storie.html", name="mozzart", title="HOME")
+def view_storie():
+    return render_template("view_storie.html", name="mozzart", title="storie-title")

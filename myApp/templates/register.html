@@ -1,6 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>REGISTER</h1>
 
+<form method="POST">
+    <h1 align="center">REGISTER</h1>
+    <div class="row mb-3">
+        <label for="inputUserName3" class="col-sm-2 col-form-label">User Name</label>
+        <div class="col-sm-10">
+            <input type="email" name="inputUserName3" class="form-control" id="inputUserName3" placeholder="Enter Username">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="inputEmail3" class="col-sm-2 col-form-label">Email Address</label>
+        <div class="col-sm-10">
+            <input type="email" name="inputEmail3" class="form-control" id="inputEmail3" placeholder="Enter Email">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-10">
+            <input type="password" name="inputPassword3" class="form-control" id="inputPassword3" placeholder="Enter password">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="inputConfirmPassword3" class="col-sm-2 col-form-label">Confirm password</label>
+        <div class="col-sm-10">
+            <input type="password" name="inputConfirmPassword3" class="form-control" id="inputConfirmPassword3" placeholder="Confirm password">
+        </div>
+    </div>
+    <div align="center">
+        <button type="submit" class="btn btn-success">REGISTER</button>
+    </div>
+    <div align="center">
+        <p>Have an Account? <span><a class="nav-item nav-link" href="/login">LOGIN</a></span></p>
+    </div>
+</form>
 {% endblock %}
