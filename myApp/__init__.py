@@ -9,4 +9,3 @@ def create_app():
 
     return app
 
-from app import routes
