@@ -9,14 +9,20 @@ auth = Blueprint("auth", __name__)
 @auth.route("/sign-up", methods=['GET', 'POST'])
 def sign_up():
     if request.method=='POST':
+        '''fetch user cred from user input'''
         username=request.form.get("inputUserName3")
         email=request.form.get("inputEmail3")
         password=request.form.get("inputPassword3")
         confirm_password=request.form.get("inputConfirmPassword3")
 
+        '''fetch user cred from db'''
         user_email_exists = User.query.filter_by(email=email).first()
         user_username_exists = User.query.filter_by(username=username).first()
 
+        '''
+        check if user input is valid or taken
+        then register user if the user does not user_username_exists
+        '''
         if user_email_exists:
             flash('Email is taken.', category='error')
         elif user_username_exists:
@@ -40,9 +46,25 @@ def sign_up():
 
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
-    email=request.form.get("inputEmail3")
-    password=request.form.get("inputPassword3")
-    print(email, password)
+    if request.method == 'POST':
+        '''fetch user cred from user input'''
+        email=request.form.get("inputEmail3")
+        password=request.form.get("inputPassword3")
+
+        '''fetch user cred from db'''
+        user = User.query.filter_by(email=email).first()
+
+        '''
+        check if user input credentials is valid
+        '''
+        if user and check_password_hash(user.password, password):
+            flash('Logged in successfully!', category='success')
+            login_user(user)
+            return redirect(url_for('main.home'))
+        else:
+            flash('Login unsuccessful. Please check your email and password.', category='error')
+
+
     return render_template("login.html", title="LOGIN")
 
 @auth.route("/logout")
