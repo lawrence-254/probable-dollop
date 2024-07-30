@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
 from os import path
+from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
 db=SQLAlchemy()
@@ -22,6 +23,7 @@ def create_app():
     '''models'''
     from .models import User
     create_database(app, DB_NAME)
+    bcrypt = Bcrypt(app)
 
     '''importing different routes from different models[vies,  models]'''
     from .views import views
