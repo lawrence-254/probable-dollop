@@ -21,7 +21,7 @@ def create_app():
 
     '''models'''
     from .models import User
-#     create_database(app, DB_NAME)
+    create_database(app, DB_NAME)
 
     '''importing different routes from different models[vies,  models]'''
     from .views import views
