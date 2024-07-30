@@ -1,6 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from . import db
 from .models import User
+from flask_login import login_required, login_user, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint("auth", __name__)
 
@@ -13,7 +15,7 @@ def sign_up():
         confirm_password=request.form.get("inputConfirmPassword3")
 
         user_email_exists = User.query.filter_by(email=email).first()
-        user_username_exists =User.query.filter_by(username=username).first()
+        user_username_exists = User.query.filter_by(username=username).first()
 
         if user_email_exists:
             flash('Email is taken.', category='error')
@@ -26,13 +28,12 @@ def sign_up():
         elif len(password) < 5 or len(confirm_password)< 5:
             flash('Password is too short!', category='error')
         else:
-            new_user = User(username=username, password=password, email=email)
+            hashed_password = generate_password_hash(password, method='sha256')
+            new_user = User(username=username, password=hashed_password, email=email)
             db.session.add(new_user)
             db.session.commit()
             flash('User account created successfully, You can now login into your account', category='success')
             return redirect(url_for('login'))
-
-        print(username, email, password, confirm_password)
     return render_template("register.html", title="REGISTER")
 
 
