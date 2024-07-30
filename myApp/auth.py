@@ -26,7 +26,7 @@ def sign_up():
         elif len(password) < 5 or len(confirm_password)< 5:
             flash('Password is too short!', category='error')
         else:
-            new_user = User(email=email, password=password, email=email)
+            new_user = User(username=username, password=password, email=email)
             db.session.add(new_user)
             db.session.commit()
             flash('User account created successfully, You can now login into your account', category='success')
