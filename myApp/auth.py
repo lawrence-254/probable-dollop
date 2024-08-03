@@ -30,12 +30,12 @@ def sign_up():
             flash('Password is too short!', category='error')
         else:
             try:
-                password_hash = generate_password_hash(password).decode('utf-8')
+                password_hash = generate_password_hash(password)
                 new_user = User(username=username, email=email, password=password_hash)
                 db.session.add(new_user)
                 db.session.commit()
                 login_user(new_user, remember=True)
-                flash('User account created successfully. You can now log into your account', category='success')
+                flash('User account created successfully. You can now access your account', category='success')
                 return redirect(url_for('views.home'))
             except Exception as e:
                 db.session.rollback()
@@ -46,30 +46,27 @@ def sign_up():
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        '''fetch user cred from user input'''
-        email=request.form.get("inputEmail3")
-        password=request.form.get("inputPassword3")
+        email = request.form.get("inputEmail3")
+        password = request.form.get("inputPassword3")
 
-        '''fetch user cred from db'''
         user = User.query.filter_by(email=email).first()
 
-        '''
-        check if user input credentials is valid
-        '''
-        if user and check_password_hash(user.password, password):
-            flash('Logged in successfully!', category='success')
-            login_user(user, remember=True)
-            return redirect(url_for('views.home'))
+        if user:
+            if check_password_hash(user.password, password):
+                flash('Logged in successfully!', category='success')
+                login_user(user, remember=True)
+                return redirect(url_for('views.home'))
+            else:
+                flash('Incorrect password.', category='error')
         else:
-            flash('Login unsuccessful. Please check your password.', category='error')
-    else:
-        flash('User email does not exist, Please REGISTER an account first', category='error')
-
+            flash('Email not found. Please register first.', category='error')
 
     return render_template("login.html", title="LOGIN")
+
 
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user(current_user)
-    return redirect(url_for("views.home"))
+    flash('Logged out successfully.', category='success')
+    return redirect(url_for("views.login"))
