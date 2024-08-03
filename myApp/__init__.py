@@ -21,7 +21,7 @@ def create_app():
     db.init_app(app)
 
     '''models'''
-    from .models import User
+    from .models import User, Stories
     create_database(app, DB_NAME)
     bcrypt = Bcrypt(app)
 
