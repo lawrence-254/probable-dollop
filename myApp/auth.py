@@ -61,12 +61,12 @@ def login():
         else:
             flash('Email not found. Please register first.', category='error')
 
-    return render_template("login.html", title="LOGIN")
+    return render_template("login.html", title="LOGIN")  
 
 
 @auth.route("/logout")
 @login_required
 def logout():
-    logout_user(current_user)
-    flash('Logged out successfully.', category='success')
-    return redirect(url_for("views.login"))
+    logout_user()
+    flash('Logged out successfully.', category='warning')
+    return redirect(url_for("auth.login"))

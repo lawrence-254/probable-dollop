@@ -9,12 +9,12 @@ views = Blueprint("views", __name__)
 def home():
     return render_template("home.html", title="HOME")
 
-@views.route("/create-story")
+@views.route("/create-storie")
 @login_required
 def create_story():
-    return render_template("create_story.html", title="NEW")
+    return render_template("create_storie.html", title="NEW")
 
-@views.route("/view-story")
+@views.route("/view-storie")
 @login_required
 def view_story():
-    return render_template("view_story.html", title="Story Title")
+    return render_template("view_storie.html", title="Story Title")
