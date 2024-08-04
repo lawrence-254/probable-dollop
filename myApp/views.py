@@ -17,37 +17,41 @@ views = Blueprint("views", __name__)
 @views.route("/home")
 @login_required
 def home():
-    return render_template("home.html", title="HOME")
+    my_stories_data = Stories.query.all()
+    return render_template("home.html", title="HOME", stories_data=my_stories_data)
+
 
 @views.route("/create-storie", methods=['GET', 'POST'])
 @login_required
-def create_storie():
+def create_story():
     if request.method == 'POST':
         title = request.form.get('title')
         category = request.form.get('category')
         content = request.form.get('content')
-        if 'image' not in request.files:
-            flash('No file part', 'error')
-            return redirect(request.url)
-        file = request.files['image']
-        if file.filename == '':
-            flash('No selected file', 'error')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
+        image = request.files.get('image')
 
-            new_story = Stories(title=title, image=filename, category=category, content=content, author=current_user.id)
+        if image and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            image.save(image_path)
+
+            new_story = Stories(
+                title=title,
+                image=filename,
+                category=category,
+                content=content,
+                author=current_user.id
+            )
             db.session.add(new_story)
             db.session.commit()
-            
+
             flash('Your story has been created!', 'success')
             return redirect(url_for('views.home'))
         else:
-            flash('Invalid file type', 'error')
-            return redirect(request.url)
+            flash('Invalid file type or no file uploaded', 'error')
+
     return render_template("create_storie.html", title="NEW")
+
 
 @views.route("/view-storie")
 @login_required

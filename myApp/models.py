@@ -8,7 +8,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(240), unique=True)
     password = db.Column(db.String(240))
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
-    stories = db.relationship('Stories', backref='author', passive_deletes=True)
+    stories = db.relationship('Stories', backref='user', passive_deletes=True)
 
 class Stories(db.Model):
     id = db.Column(db.Integer, primary_key=True)

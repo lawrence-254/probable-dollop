@@ -1,11 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Hello {{current_user.username}}</h1>
+<h1>Hello {{current_user.username}}, welcome to:</h1>
 <h2>STORIE</h2>
 <p>STORIE is a platform where you can share your stories with the world.</p>
 <p>Click on the link below to start sharing your stories.</p>
 <a href="/create-storie" class="btn btn-primary">CREATE STORIES</a>
+<h2 align="center">Stories</h2>
+{% for storie in stories_data %}
+<div class="card mb-3">
+    <img src="{{storie.image}}" class="card-img-top" alt="{{storie.title}}">
+    <div class="card-body">
+        <h5 class="card-title">{{storie.title}}</h5>
+        <p class="card-text">{{storie.content}}</p>
+        <p class="card-text"><small class="text-muted">{{storie.category}}</small></p>
+    </div>
+    <div class="card-footer">
+        <small class="text-muted
+        {% if storie.user_id == current_user.id %}
+        float-start
+        {% endif %}
+        ">
+        {% if storie.author == current_user.id %}
+        <a href="/edit-storie/{{storie.id}}" class="btn btn-primary">Edit</a>
+        <a href="/delete-storie/{{storie.id}}" class="btn btn-danger">Delete</a>
+        {% endif %}
+        {{storie.created_at}}
+        </small>
+        <small class="text-muted float-end">By: {{storie.user.username}}</small>
+        </div>
+</div>
 
-
+{%endfor%}
 {% endblock %}

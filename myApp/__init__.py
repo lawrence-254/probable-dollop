@@ -5,6 +5,7 @@ from os import path
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
+
 db=SQLAlchemy()
 DB_NAME="storie.db"
 
@@ -18,7 +19,9 @@ def create_app():
 
     '''Database setup'''
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
     db.init_app(app)
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
     '''models'''
     from .models import User, Stories
