@@ -12,8 +12,7 @@
     <img src="{{storie.image}}" class="card-img-top" alt="{{storie.title}}">
     <div class="card-body">
         <h5 class="card-title">{{storie.title}}</h5>
-        <p class="card-text">{{storie.content}}</p>
-        <p class="card-text"><small class="text-muted">{{storie.category}}</small></p>
+        <p class="card-text"><small class="text-muted"><a href="/storie/{{storie.category}}">{{storie.category}}</a></small></p>
     </div>
     <div class="card-footer">
         <small class="text-muted
@@ -27,7 +26,8 @@
         {% endif %}
         {{storie.created_at}}
         </small>
-        <small class="text-muted float-end">By: {{storie.user.username}}</small>
+        <small class="text-muted float-end">By: <a href="/stories/{{storie.username}}">{{storie.user.username}}</a></small>
+        <small>On: {{storie.date_created}}</small>
         </div>
 </div>
 
