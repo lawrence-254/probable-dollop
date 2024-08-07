@@ -10,7 +10,7 @@
 {% for storie in stories_data %}
 <div class="card mb-3">
     {%if storie.image == ''%}
-    <img src="https://via.placeholder.com/20" class="card-img-top" alt="...">
+    <img src="https://picsum.photos/1280/720" class="card-img-top" alt="...">
     {%else%}
     <img src="{{storie.image}}" class="card-img-top" alt='{{storie.title}}'>
     {%endif%}

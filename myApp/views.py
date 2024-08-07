@@ -48,7 +48,7 @@ def create_story():
             flash('Your story has been created!', 'success')
             return redirect(url_for('views.home'))
         else:
-            flash('new Storie created but no file uploaded', 'succes')
+            flash('New Storie created but no file uploaded', 'succes')
             new_story = Stories(
                 title=title,
                 image='',
@@ -74,4 +74,12 @@ def delete_storie(id):
 
     if not storie:
         flash("Error while trying to delete, check if the storie existx.", category="error")
-        return redirect(url_for('views.home'))
+    elif storie.author != current_user.id:
+        flash("You do not have the permission to delete this storie!", category="error")
+    else:
+        db.session.delete(storie)
+        db.session.commit()
+        flash("Storie deleted!", category="success")
+    
+    
+    return redirect(url_for('views.home'))
