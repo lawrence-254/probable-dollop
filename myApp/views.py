@@ -48,7 +48,16 @@ def create_story():
             flash('Your story has been created!', 'success')
             return redirect(url_for('views.home'))
         else:
-            flash('Invalid file type or no file uploaded', 'error')
+            flash('new Storie created but no file uploaded', 'succes')
+            new_story = Stories(
+                title=title,
+                image='',
+                category=category,
+                content=content,
+                author=current_user.id
+            )
+            db.session.add(new_story)
+            db.session.commit()
 
     return render_template("create_storie.html", title="NEW")
 
@@ -57,3 +66,12 @@ def create_story():
 @login_required
 def view_storie():
     return render_template("view_storie.html", title="Story Title")
+
+@views.route("/delete-storie/<id>")
+@login_required
+def delete_storie(id):
+    storie = Stories.query.filter_by(id=id).first()
+
+    if not storie:
+        flash("Error while trying to delete, check if the storie existx.", category="error")
+        return redirect(url_for('views.home'))

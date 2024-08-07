@@ -9,7 +9,11 @@
 <h2 align="center">Stories</h2>
 {% for storie in stories_data %}
 <div class="card mb-3">
-    <img src="{{storie.image}}" class="card-img-top" alt="{{storie.title}}">
+    {%if storie.image == ''%}
+    <img src="https://via.placeholder.com/20" class="card-img-top" alt="...">
+    {%else%}
+    <img src="{{storie.image}}" class="card-img-top" alt='{{storie.title}}'>
+    {%endif%}
     <div class="card-body">
         <h5 class="card-title">{{storie.title}}</h5>
         <p class="card-text"><small class="text-muted"><a href="/storie/{{storie.category}}">{{storie.category}}</a></small></p>
