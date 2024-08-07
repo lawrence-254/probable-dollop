@@ -21,8 +21,17 @@
         {% endif %}
         ">
         {% if storie.author == current_user.id %}
-        <a href="/edit-storie/{{storie.id}}" class="btn btn-primary">Edit</a>
-        <a href="/delete-storie/{{storie.id}}" class="btn btn-danger">Delete</a>
+        <div class="btn-group">
+            <button
+            type="button"
+            data-bs-toggle="dropdown"
+            class="btn btn-sm btn-secondary dropdown-toggle"
+            ></button>
+            <ul class="dropdown-menu">
+                <li><a href="/edit-storie/{{storie.id}}" class="btn btn-primary dropdown-item">Edit</a></li>
+                <li><a href="/delete-storie/{{storie.id}}" class="btn btn-danger dropdown-item">Delete</a></li>
+            </ul>
+        </div>
         {% endif %}
         {{storie.created_at}}
         </small>
