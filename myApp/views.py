@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 from . import db
 import os
-from .models import Stories
+from .models import Stories, User
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -15,7 +15,6 @@ views = Blueprint("views", __name__)
 
 @views.route("/")
 @views.route("/home")
-@login_required
 def home():
     my_stories_data = Stories.query.all()
     return render_template("home.html", title="HOME", stories_data=my_stories_data)
@@ -62,10 +61,14 @@ def create_story():
     return render_template("create_storie.html", title="NEW")
 
 
-@views.route("/view-storie")
-@login_required
-def view_storie():
-    return render_template("view_storie.html", title="Story Title")
+@views.route("/view-storie/<id>")
+def view_storie(id):
+    storie = Stories.query.filter_by(id=id).first()
+    if not storie:
+        flash("Storie wo not found!", category="error")
+        return redirect(url_for('views.home'))
+    title=storie.title
+    return render_template("view_storie.html", title=title, storie=storie)
 
 @views.route("/delete-storie/<id>")
 @login_required
@@ -83,3 +86,16 @@ def delete_storie(id):
     
     
     return redirect(url_for('views.home'))
+
+@views.route("/view-stories/<username>")
+def view_user_stories(username):
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash("User not found!", category="error")
+        return redirect(url_for('views.home'))
+    
+    user_stories = Stories.query.filter_by(author=user.id).all()
+    title = f"{user.username}'s Stories"
+    
+    return render_template("view_user_stories.html", title=title, stories_data=user_stories)
+

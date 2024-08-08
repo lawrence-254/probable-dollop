@@ -6,6 +6,7 @@
 <p>STORIE is a platform where you can share your stories with the world.</p>
 <p>Click on the link below to start sharing your stories.</p>
 <a href="/create-storie" class="btn btn-primary">CREATE STORIES</a>
+
 <h2 align="center">Stories</h2>
 {% for storie in stories_data %}
 <div class="card mb-3">
@@ -36,13 +37,15 @@
                 <li><a href="/delete-storie/{{storie.id}}" class="btn btn-danger dropdown-item">Delete</a></li>
             </ul>
         </div>
+        {%else%}
+        <small >By: <a href="/stories/{{storie.username}}">{{storie.user.username}}</a></small>
         {% endif %}
         {{storie.created_at}}
         </small>
-        <small class="text-muted float-end">By: <a href="/stories/{{storie.username}}">{{storie.user.username}}</a></small>
-        <small>On: {{storie.date_created}}</small>
+        
+        <small class="text-muted float-end">On: {{storie.date_created}}</small>
         </div>
 </div>
 
 {%endfor%}
-{% endblock %}
+{%endblock%}

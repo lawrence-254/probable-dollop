@@ -1,6 +1,15 @@
 {%extends "base.html"%}
 {%block content%}
 
+{% if stories_data %}
+    {% if stories_data[0].author == current_user.id %}
+        <h1 align="center">Hello {{ stories_data[0].user.username }}, welcome to your stories timeline</h1>
+    {% else %}
+        <h1 align="center">Hello, welcome to stories by {{ stories_data[0].user.username }}</h1>
+    {% endif %}
+{% endif %}
+
+{% for storie in stories_data %}
 
 <div class="card mb-3">
     {%if storie.image == ''%}
@@ -38,22 +47,7 @@
         
         <small class="text-muted float-end">On: {{storie.date_created}}</small>
         </div>
-        <div>
-            <h2>react</h2>
-            <form>
-                <h4>comment</h4>
-                <div class="form-group mb-3">
-                    <label for="image">Image</label>
-                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="coment">Coment</label>
-                    <textarea class="form-control" id="coment" name="coment" rows="5" required></textarea>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Create Comment</button>
-                </div>
-            </form>
-        </div>
-</div> 
+</div>
+
+{%endfor%}
 {%endblock%}
