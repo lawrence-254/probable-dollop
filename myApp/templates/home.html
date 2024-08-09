@@ -6,10 +6,21 @@
 <p>STORIE is a platform where you can share your stories with the world.</p>
 <p>Click on the link below to start sharing your stories.</p>
 <a href="/create-storie" class="btn btn-primary">CREATE STORIES</a>
+<small class="text-muted float-end">
+    {% for storie in stories_data %}
+    {% if storie.author == current_user.id %}
+    <a href="/view-stories/{{ storie.user.username }}">
+        My Stories
+    </a>
+    {% endif %}
+    {%endfor%}
+</small>
 
-<h2 align="center">Stories</h2>
+
 {% for storie in stories_data %}
-<div class="card mb-3">
+<div class="card mb-3 ">
+    <a href="/view-storie/{{ storie.id }}">
+    <a class="" href="/view-storie/{{storie.id}}">
     {%if storie.image == ''%}
     <img src="https://picsum.photos/1280/720" class="card-img-top" alt="...">
     {%else%}
@@ -38,13 +49,14 @@
             </ul>
         </div>
         {%else%}
-        <small >By: <a href="/stories/{{storie.username}}">{{storie.user.username}}</a></small>
+        <small >By: <a href="/view-stories/{{storie.user.username}}">{{storie.user.username}}</a></small>
         {% endif %}
         {{storie.created_at}}
         </small>
         
         <small class="text-muted float-end">On: {{storie.date_created}}</small>
         </div>
+        </a>
 </div>
 
 {%endfor%}

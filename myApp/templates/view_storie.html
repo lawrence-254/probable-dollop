@@ -1,59 +1,88 @@
-{%extends "base.html"%}
-{%block content%}
-
+{% extends "base.html" %}
+{% block content %}
 
 <div class="card mb-3">
-    {%if storie.image == ''%}
+    
+    {% if storie.image == '' %}
     <img src="https://picsum.photos/1280/720" class="card-img-top" alt="...">
-    {%else%}
-    <img src="{{storie.image}}" class="card-img-top" alt='{{storie.title}}'>
-    {%endif%}
+    {% else %}
+    <img src="{{ storie.image }}" class="card-img-top" alt="{{ storie.title }}">
+    {% endif %}
+    
     <div class="card-body">
-        <h5 class="card-title">{{storie.title}}</h5>
-        <p class="card-text"><small class="text-muted"><a href="/storie/{{storie.category}}">{{storie.category}}</a></small></p>
+        <h5 class="card-title">{{ storie.title }}</h5>
+        <p class="card-text">
+            <small class="text-muted">
+                <a href="/storie/{{ storie.category }}">{{ storie.category }}</a>
+            </small>
+        </p>
     </div>
+    
     <div class="card-footer">
-        <small class="text-muted
-        {% if storie.user_id == current_user.id %}
-        float-start
-        {% endif %}
-        ">
-        {% if storie.author == current_user.id %}
-        <div class="btn-group">
-            <button
-            type="button"
-            data-bs-toggle="dropdown"
-            class="btn btn-sm btn-secondary dropdown-toggle"
-            ></button>
-            <ul class="dropdown-menu">
-                <li><a href="/edit-storie/{{storie.id}}" class="btn btn-primary dropdown-item">Edit</a></li>
-                <li><a href="/delete-storie/{{storie.id}}" class="btn btn-danger dropdown-item">Delete</a></li>
-            </ul>
-        </div>
-        {%else%}
-        <small >By: <a href="/stories/{{storie.username}}">{{storie.user.username}}</a></small>
-        {% endif %}
-        {{storie.created_at}}
+        <small class="text-muted {% if storie.user_id == current_user.id %}float-start{% endif %}">
+            {% if storie.author == current_user.id %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                <ul class="dropdown-menu">
+                    <li><a href="/edit-storie/{{ storie.id }}" class="btn btn-primary dropdown-item">Edit</a></li>
+                    <li><a href="/delete-storie/{{ storie.id }}" class="btn btn-danger dropdown-item">Delete</a></li>
+                </ul>
+            </div>
+            {% else %}
+            <small>By: <a href="/view-stories/{{ storie.user.username }}">{{ storie.user.username }}</a></small>
+            {% endif %}
+            {{ storie.created_at }}
         </small>
         
-        <small class="text-muted float-end">On: {{storie.date_created}}</small>
-        </div>
+        <small class="text-muted float-end">On: {{ storie.date_created }}</small>
+    </div>
+    
+    {% if current_user.is_authenticated %}
+    <div>
+        <h2>React</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <h4>Comment</h4>
+            <div class="form-group mb-3">
+                <label for="image">Image</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+            </div>
+            <div class="form-group mb-3">
+                <label for="coment">Comment</label>
+                <textarea class="form-control" id="coment" name="coment" rows="5" required></textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Create Comment</button>
+            </div>
+        </form>
+    </div>
+    {% else %}
+    <h1 align="center" class="text-warning">
+        <span><a class="nav-item nav-link text-success" href="/sign-up">SIGN UP</a></span>
+        or
+        <span><a class="nav-item nav-link text-success" href="/login">LOGIN</a></span>
+        to leave a comment
+    </h1>
+    {% endif %}
+    
+    <div>
+        <h2 align="center">Comments</h2>
         <div>
-            <h2>react</h2>
-            <form>
-                <h4>comment</h4>
-                <div class="form-group mb-3">
-                    <label for="image">Image</label>
-                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+            {% for comment in comment_data %}
+            {%if comment.image == ''%}
+            <div>
+            <p>{{comment.content}}</p>
+            <small class="text-muted float-end">By {{comment.user.username}}, on {{comment.date_created}}</small>
+            </div>
+            {%else%}
+            <div>
+                <img src="{{ comment.image }}" class="card-img-top" alt="{{ comment.title }}">
+                <p>{{comment.content}}</p>
+                <small class="text-muted float-end">By {{comment.user.username}}, on {{comment.date_created}}</small>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="coment">Coment</label>
-                    <textarea class="form-control" id="coment" name="coment" rows="5" required></textarea>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Create Comment</button>
-                </div>
-            </form>
+            {%endif%}
+            {%endfor%}
         </div>
+    </div>
 </div> 
-{%endblock%}
+
+{% endblock %}

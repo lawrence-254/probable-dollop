@@ -12,6 +12,7 @@
 {% for storie in stories_data %}
 
 <div class="card mb-3">
+    <a href="/view-storie/{{ storie.id }}">
     {%if storie.image == ''%}
     <img src="https://picsum.photos/1280/720" class="card-img-top" alt="...">
     {%else%}
@@ -47,6 +48,7 @@
         
         <small class="text-muted float-end">On: {{storie.date_created}}</small>
         </div>
+    </a>
 </div>
 
 {%endfor%}

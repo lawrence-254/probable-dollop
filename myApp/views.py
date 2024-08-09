@@ -60,15 +60,10 @@ def create_story():
 
     return render_template("create_storie.html", title="NEW")
 
-
-@views.route("/view-storie/<id>")
-def view_storie(id):
-    storie = Stories.query.filter_by(id=id).first()
-    if not storie:
-        flash("Storie wo not found!", category="error")
-        return redirect(url_for('views.home'))
-    title=storie.title
-    return render_template("view_storie.html", title=title, storie=storie)
+@views.route("/edit_story/<id>", methods=['GET', 'POST'])
+@login_required
+def edit_story(id):
+    pass
 
 @views.route("/delete-storie/<id>")
 @login_required
@@ -98,4 +93,14 @@ def view_user_stories(username):
     title = f"{user.username}'s Stories"
     
     return render_template("view_user_stories.html", title=title, stories_data=user_stories)
+
+
+@views.route("/view-storie/<id>")
+def view_storie(id):
+    storie = Stories.query.filter_by(id=id).first()
+    if not storie:
+        flash("Storie wo not found!", category="error")
+        return redirect(url_for('views.home'))
+    title=storie.title
+    return render_template("view_storie.html", title=title, storie=storie)
 
