@@ -19,7 +19,7 @@ def home():
     my_stories_data = Stories.query.all()
     return render_template("home.html", title="HOME", stories_data=my_stories_data)
 
-#########
+#########storie and actions
 @views.route("/create-storie", methods=['GET', 'POST'])
 @login_required
 def create_story():
@@ -69,7 +69,7 @@ def edit_storie(id):
         flash('Story not found', 'danger')
         return redirect(url_for('views.home'))
     
-    if existing_storie.author_id != current_user.id:
+    if existing_storie.author != current_user.id:
         flash('You are not authorized to edit this story.', 'danger')
         return redirect(url_for('views.home'))
 
@@ -115,8 +115,7 @@ def delete_storie(id):
     
     
     return redirect(url_for('views.home'))
-
-########
+########storie sub actions
 @views.route("/view-stories/<username>")
 def view_user_stories(username):
     user = User.query.filter_by(username=username).first()
@@ -129,7 +128,6 @@ def view_user_stories(username):
     
     return render_template("view_user_stories.html", title=title, stories_data=user_stories)
 #
-
 @views.route("/view-storie/<id>")
 def view_storie(id):
     storie = Stories.query.filter_by(id=id).first()
@@ -139,3 +137,4 @@ def view_storie(id):
     title=storie.title
     return render_template("view_storie.html", title=title, storie=storie)
 
+####storie comment sub actions

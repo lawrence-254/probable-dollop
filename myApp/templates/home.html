@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Hello {{current_user.username}}, welcome to:</h1>
-<h2>STORIE</h2>
+<h1>Hello {{current_user.username}},</h1>
+<h2> welcome to STORIE</h2>
 <p>STORIE is a platform where you can share your stories with the world.</p>
 <p>Click on the link below to start sharing your stories.</p>
+<div class="mb-4">
 <a href="/create-storie" class="btn btn-primary">CREATE STORIES</a>
 <small class="text-muted float-end">
     {% for storie in stories_data %}
@@ -15,7 +16,7 @@
     {% endif %}
     {%endfor%}
 </small>
-
+</div>
 
 {% for storie in stories_data %}
 <div class="card mb-3 ">

@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="text-left mb-4 mt-4">
+    <a class="text-success" href="/"><-GO TO HOMEPAGE</a>
+</div>
 <div class="container">
-    <div class="text-left">
-        <a class="text-success" href="/"><-GO TO HOMEPAGE</a>
-    </div>
+   
     <h1 class="text-center mb-4">Edit Your Story</h1>
     {% if current_storie != '' %}
     <form method="PUT" action="{{ url_for('views.edit_storie', id=current_storie.id) }}" enctype="multipart/form-data">
