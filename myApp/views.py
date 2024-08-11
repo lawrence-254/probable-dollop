@@ -12,7 +12,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 views = Blueprint("views", __name__)
-
+#
 @views.route("/")
 @views.route("/home")
 def home():
@@ -59,15 +59,46 @@ def create_story():
             db.session.commit()
 
     return render_template("create_storie.html", title="NEW")
-
-@views.route("/edit-storie/<id>", methods=['GET', 'PUT'])
+#
+@views.route("/edit-storie/<id>", methods=['GET', 'POST'])
 @login_required
 def edit_storie(id):
-    ##Fetches the current stories and populates to be changed in the form
-    existing_storie= Stories.query.filter_by(id=id).first()
-    #fetches form data to be updated
-    return render_template("edit_storie.html", title='edit', current_storie=existing_storie)
+    # Fetches the current stories and populates to be changed in the form
+    existing_storie = Stories.query.filter_by(id=id).first()
+    if not existing_storie:
+        flash('Story not found', 'danger')
+        return redirect(url_for('views.home'))
+    
+    if existing_storie.author_id != current_user.id:
+        flash('You are not authorized to edit this story.', 'danger')
+        return redirect(url_for('views.home'))
 
+    # Fetches form data to be updated
+    if request.method == 'POST':
+        title = request.form.get('title')
+        category = request.form.get('category')
+        content = request.form.get('content')
+
+        # Update the story fields
+        existing_storie.title = title
+        existing_storie.category = category
+        existing_storie.content = content
+
+        if 'image' in request.files and request.files['image'].filename != '':
+            image_file = request.files.get('image')
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            image_file.save(image_path)
+            existing_storie.image = filename
+
+        # Save the changes to the database
+        db.session.commit()
+
+        flash('Story updated successfully!', 'success')
+        return redirect(url_for('views.home'))
+
+    return render_template("edit_storie.html", title='edit', current_storie=existing_storie)
+#
 @views.route("/delete-storie/<id>")
 @login_required
 def delete_storie(id):
@@ -97,7 +128,7 @@ def view_user_stories(username):
     title = f"{user.username}'s Stories"
     
     return render_template("view_user_stories.html", title=title, stories_data=user_stories)
-
+#
 
 @views.route("/view-storie/<id>")
 def view_storie(id):
