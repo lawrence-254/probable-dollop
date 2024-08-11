@@ -40,20 +40,20 @@
     </div>
     
     {% if current_user.is_authenticated %}
-    <div>
-        <h2>React</h2>
-        <form method="POST" enctype="multipart/form-data">
-            <h4>Comment</h4>
+    <div class="m-4">
+        <h4 align="center">React to post</h2>
+        <form method="POST" enctype="multipart/form-data" action="/create-comment/{{storie.id}}">
+            <h5>Comment</h4>
             <div class="form-group mb-3">
                 <label for="image">Image</label>
                 <input type="file" class="form-control" id="image" name="image" accept="image/*">
             </div>
             <div class="form-group mb-3">
                 <label for="coment">Comment</label>
-                <textarea class="form-control" id="coment" name="coment" rows="5" required></textarea>
+                <textarea class="form-control" id="coment" name="coment" rows="5" placeholder="Add your comment"></textarea>
             </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Create Comment</button>
+            <div class="text-center float-end">
+                <button type="submit" class="btn btn-info">Add Comment</button>
             </div>
         </form>
     </div>

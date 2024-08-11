@@ -138,3 +138,8 @@ def view_storie(id):
     return render_template("view_storie.html", title=title, storie=storie)
 
 ####storie comment sub actions
+@views.route("/create-comment/<storie_id>", methods=['GET', 'POST'])
+@login_required
+def create_comment(storie_id):
+    return(render_template("view_storie.html"))
+
