@@ -1,6 +1,8 @@
 {%extends "base.html"%}
 {%block content%}
-
+<div class="text-left"> 
+    <a class=" text-success" href="/"><-GO TO HOMEPAGE</a>
+</div>
 {% if stories_data %}
     {% if stories_data[0].author == current_user.id %}
         <h1 align="center">Hello {{ stories_data[0].user.username }}, welcome to your stories timeline</h1>

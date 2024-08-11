@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="text-left">
+        <a class="text-success" href="/"><-GO TO HOMEPAGE</a>
+    </div>
+    <h1 class="text-center mb-4">Edit Your Story</h1>
+    {% if current_storie != '' %}
+    <form method="POST" action="{{ url_for('views.edit_storie', id=current_storie.id) }}" enctype="multipart/form-data">
+        <div class="form-group mb-3">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ current_storie.title }}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="image">Image</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+            {% if current_storie.image %}
+            <p class="mt-2">Current image: {{ current_storie.image }}</p>
+            {% endif %}
+        </div>
+        <div class="form-group mb-3">
+            <label for="category">Category</label>
+            <input type="text" class="form-control" id="category" name="category" value="{{ current_storie.category }}">
+        </div>
+        <div class="form-group mb-3">
+            <label for="content">Content</label>
+            <textarea class="form-control" id="content" name="content" rows="5" required>{{ current_storie.content }}</textarea>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Update Story</button>
+        </div>
+    </form>
+    {% endif %}   
+</div>
+{% endblock %}
+

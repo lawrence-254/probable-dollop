@@ -19,7 +19,7 @@ def home():
     my_stories_data = Stories.query.all()
     return render_template("home.html", title="HOME", stories_data=my_stories_data)
 
-
+#########
 @views.route("/create-storie", methods=['GET', 'POST'])
 @login_required
 def create_story():
@@ -60,10 +60,13 @@ def create_story():
 
     return render_template("create_storie.html", title="NEW")
 
-@views.route("/edit_story/<id>", methods=['GET', 'POST'])
+@views.route("/edit-storie/<id>", methods=['GET', 'PUT'])
 @login_required
-def edit_story(id):
-    pass
+def edit_storie(id):
+    ##Fetches the current stories and populates to be changed in the form
+    existing_storie= Stories.query.filter_by(id=id).first()
+    #fetches form data to be updated
+    return render_template("edit_storie.html", title='edit', current_storie=existing_storie)
 
 @views.route("/delete-storie/<id>")
 @login_required
@@ -82,6 +85,7 @@ def delete_storie(id):
     
     return redirect(url_for('views.home'))
 
+########
 @views.route("/view-stories/<username>")
 def view_user_stories(username):
     user = User.query.filter_by(username=username).first()
@@ -99,7 +103,7 @@ def view_user_stories(username):
 def view_storie(id):
     storie = Stories.query.filter_by(id=id).first()
     if not storie:
-        flash("Storie wo not found!", category="error")
+        flash("Storie was not found!", category="error")
         return redirect(url_for('views.home'))
     title=storie.title
     return render_template("view_storie.html", title=title, storie=storie)
