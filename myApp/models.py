@@ -23,7 +23,6 @@ class Stories(db.Model):
 
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    image = db.Column(db.String(240))
     content = db.Column(db.Text)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
     storie = db.Column(db.Integer, db.ForeignKey('stories.id', ondelete='CASCADE'), nullable=False)

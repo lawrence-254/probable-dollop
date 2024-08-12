@@ -143,7 +143,7 @@ def view_storie(id):
 def create_comment(storie_id):
     coment = request.form.get('coment')
     storie = Stories.query.filter_by(id=storie_id).first()
-    image = request.files.get('image')
+    
     
     if not coment:
         flash('Error: Your coment cannot be empty', category='error')
@@ -152,28 +152,30 @@ def create_comment(storie_id):
             flash("Storie was not found!", category="error")
             return redirect(url_for('views.home'))
         else:
-            if image and allowed_file(image.filename):
-                filename = secure_filename(image.filename)
-                image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-                image.save(image_path)
-
-                new_comment = Comments(content=coment,image=filename, author=current_user.id)
-                db.session.add(new_comment)
-                db.session.commit()
-
-                flash('Your comment has been added!', 'success')
-                return redirect(url_for('views.home'))
-            else:
-                flash('New comment added without image ', 'succes')
-                new_comment = Comments(content=coment,image=filename, author=current_user.id)
-                db.session.add(new_comment)
-                db.session.commit()
-
+            new_comment = Comments(content=coment, storie=storie_id, author=current_user.id)
+            db.session.add(new_comment)
+            db.session.commit()
+            flash('Your comment has been added!', 'success')
+    
 
     return render_template("view_storie.html", storie=storie)
 
-@views.route('/get_comment')
+@views.route('/get-comment')
 def get_comment():
     comments_data=Comments.query.all()
     return render_template("view_storie.html", comments_data=comments_data)
 
+
+@views.route("/delet-comment/<id>")
+def delete_comment(id):
+    comment_to_delete = Comments.query.filter_by(id=id).first()
+
+    if not comment_to_delete:
+        flash('comment does not exist', category='error')
+    elif comment_to_delete.author != current_user.id:
+        flash("You do not have the permission to delete this comment!", category="error")
+    else:
+        db.session.delete(comment_to_delete)
+        db.session.commit()
+        flash("Storie deleted!", category="success")
+    
