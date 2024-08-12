@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 from . import db
 import os
-from .models import Stories, User
+from .models import Stories, User, Comments
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -138,8 +138,37 @@ def view_storie(id):
     return render_template("view_storie.html", title=title, storie=storie)
 
 ####storie comment sub actions
-@views.route("/create-comment/<storie_id>", methods=['GET', 'POST'])
+@views.route("/create-comment/<storie_id>", methods=[ 'POST'])
 @login_required
 def create_comment(storie_id):
-    return(render_template("view_storie.html"))
+    coment = request.form.get('coment')
+    storie = Stories.query.filter_by(id=storie_id).first()
+    image = request.files.get('image')
+    
+    if not coment:
+        flash('Error: Your coment cannot be empty', category='error')
+    else:    
+        if not storie:
+            flash("Storie was not found!", category="error")
+            return redirect(url_for('views.home'))
+        else:
+            if image and allowed_file(image.filename):
+                filename = secure_filename(image.filename)
+                image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                image.save(image_path)
+
+                new_comment = Comments(content=coment,image=filename, author=current_user.id)
+                db.session.add(new_comment)
+                db.session.commit()
+
+                flash('Your comment has been added!', 'success')
+                return redirect(url_for('views.home'))
+            else:
+                flash('New comment added without image ', 'succes')
+                new_comment = Comments(content=coment,image=filename, author=current_user.id)
+                db.session.add(new_comment)
+                db.session.commit()
+
+
+    return render_template("view_storie.html", storie=storie)
 
