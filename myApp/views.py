@@ -172,3 +172,8 @@ def create_comment(storie_id):
 
     return render_template("view_storie.html", storie=storie)
 
+@views.route('/get_comment')
+def get_comment():
+    comments_data=Comments.query.all()
+    return render_template("view_storie.html", comments_data=comments_data)
+
