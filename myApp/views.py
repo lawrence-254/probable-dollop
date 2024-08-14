@@ -90,10 +90,8 @@ def edit_storie(id):
             image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             image_file.save(image_path)
             existing_storie.image = filename
-
         # Save the changes to the database
         db.session.commit()
-
         flash('Story updated successfully!', 'success')
         return redirect(url_for('views.home'))
 
