@@ -1,0 +1,108 @@
+{% extends "auth/layout.html" %}
+
+{% block protected %}
+<main class="dashboard">
+
+    <!-- HEADER -->
+    <header class="dashboard__header">
+        <h2>Edit and add information to your portfolio</h2>
+
+        <form method="POST" class="logout__form">
+            <input type="hidden" name="logout" value="">
+            <button type="submit" name="logout_button" class="">
+                Logout
+            </button>
+        </form>
+    </header>
+
+    <!-- ADD PROJECT -->
+    <section class="card">
+        <h3>Add Project</h3>
+
+        <form method="POST" enctype="multipart/form-data" class="form">
+
+            <div class="form-group">
+                <label for="title">Project Title</label>
+                <input type="text" name="title" id="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="live_link">Live Link URL</label>
+                <input type="url" id="live_link" name="live_link">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="aim">Project Aims (comma separated)</label>
+                <input type="text" name="aim" id="aim" placeholder="e.g build system, solve X problem">
+            </div>
+
+            <div class="form-group">
+                <label for="tech">Tech Stack (comma separated)</label>
+                <input type="text" id="tech" name="tech" placeholder="python, flask, react">
+            </div>
+
+            <div class="form-group">
+                <label for="thumbnail">Thumbnail</label>
+                <input type="file" name="thumbnail" id="thumbnail">
+            </div>
+
+            <div class="form-group">
+                <label for="hero">Hero Image</label>
+                <input type="file" name="hero" id="hero">
+            </div>
+            <div class="form-group">
+                <label for="video_link">Project preview video link</label>
+                <input type="url" id="video_link" name="video_link">
+            </div>
+
+            <button type="submit" name="add_project_button" class="btn btn-primary">
+                Add Project
+            </button>
+
+        </form>
+    </section>
+
+    <!-- EDIT ABOUT -->
+    <section class="card">
+        <h3>Edit Your Information</h3>
+
+        <form method="POST" enctype="multipart/form-data" class="form">
+
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea name="bio" id="bio" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="techstack_used_extensively">Tech You Use Extensively</label>
+                <input type="text" placeholder="python, flask, sql" name="techstack_used_extensively" id="techstack_used_extensively">
+            </div>
+
+            <div class="form-group">
+                <label for="familiar_techstack">Familiar Tech Stack</label>
+                <input type="text" placeholder="python, flask, sql" name="familiar_techstack" id="familiar_techstack">
+            </div>
+
+            <div class="form-group">
+                <label for="interested_in_techstack">Tech of Interest</label>
+                <input type="text" placeholder="python, flask, sql" id="interested_in_techstack" name="interested_in_techstack">
+            </div>
+            <div class="form-group">
+                <label for="cv">cv</label>
+                <input type="file" name="cv" id="cv">
+            </div>
+
+            <button type="submit" name="edit_about_button" class="btn btn-secondary">
+                Save Changes
+            </button>
+
+        </form>
+    </section>
+
+</main>
+{% endblock %}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.jpeg')}}" type="image/x-icon">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}"/>
+    {% if request.path == url_for('home') %}
+    {% set css_file = 'css/home.css' %}
+    {% elif request.path == url_for('about') %}
+    {% set css_file = 'css/about.css' %}
+    {% elif request.path == url_for('contact') %}
+    {% set css_file = 'css/contact.css' %}
+    {% else %}
+    {% set css_file = 'css/project_view.css' %}
+    {% endif %}
+    <link rel="stylesheet" href="{{ url_for('static', filename=css_file) }}">
+    <title>PORTFOLIO | L. OCHIENG</title>
+</head>
+<body>
+    <header class="header">
+    <a href="{{url_for('add_information')}}" class="hidden__button"></a>
+    <a href="{{ url_for('home')}}" class="logo__link">
+    <h1 >LAWRENCE OCHIENG ODHIAMBO</h1>
+    </a>
+    <nav class="nav">
+        <a href="{{ url_for('home')}}" class="nav__link {{'nav__link--active' if request.path == url_for('home')}}">My Projects</a>
+        <a href="{{ url_for('contact')}}" class="nav__link {{'nav__link--active' if request.path == url_for('contact')}} ">Connect With Me</a>
+        <a href="{{ url_for('about')}}" class="nav__link {{'nav__link--active' if request.path == url_for('about')}}">About Me</a>
+    </nav>
+    </header>
+    {% block content%}
+    {% endblock%}
+</body>
+</html>
