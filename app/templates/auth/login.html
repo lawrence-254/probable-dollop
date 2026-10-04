@@ -1,70 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Admin login · Portfolio{% endblock %}
 
-{%extends "auth/layout.html"%}
-{%block protected%}
-<label class="authentication__title">authenticate</label>
-<form class="authentication__form--container" method="post">
-    <label  class="authentication__label">Email</label>
-    <input class="authentication__input" type="email" name="email" />
-    <label class="authentication__label">Password</label>
-    <input class="authentication__input" type="password" name="password" />
-    <input type="submit" value="login" class="login__button"/>
-</form>
+{% block content %}
+<section style="max-width: 480px; margin: 0 auto;">
+  <h1>Admin login</h1>
+  <p class="muted">
+    If no admin exists yet, the first successful submission creates the account.
+  </p>
 
-<div class="auth-container">
+  <div class="card">
+    <form method="post" action="{{ url_for('login_or_register') }}">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required autocomplete="username">
 
-    <h1>Admin Login</h1>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required autocomplete="current-password" minlength="8">
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-            <div class="flash {{ category }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endwith %}
-
-    <form method="POST">
-
-        <div>
-            <label for="email">
-                Email
-            </label>
-
-            <input
-                id="email"
-                type="email"
-                name="email"
-                autocomplete="email"
-                required
-            >
-        </div>
-
-        <div>
-            <label for="password">
-                Password
-            </label>
-
-            <input
-                id="password"
-                type="password"
-                name="password"
-                autocomplete="current-password"
-                required
-            >
-        </div>
-
-        <button type="submit">
-            Login
-        </button>
-
+      <button type="submit">Continue</button>
     </form>
 
-    <p>
-        <a href="{{ url_for('forgot_password') }}">
-            Forgot your password?
-        </a>
+    <p style="margin-top: 1rem;">
+      <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
     </p>
-
-</div>
-
-<a href="{{ url_for('home')}}" class="home__link" >Go to homescreen</a>
-{%endblock%}
+  </div>
+</section>
+{% endblock %}

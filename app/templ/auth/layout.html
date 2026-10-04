@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.jpeg')}}" type="image/x-icon">
+    <title>Dashboard | L. OCHIENG</title>
+</head>
+<body>
+    {%for message in get_flashed_messages()%}
+    <div class="alert">
+        <p>{{message}}</p>
+    </div>
+    {%endfor%}
+    {%block protected%}
+    {%endblock%}
+
+</body>
+</html>
+
+<style>
+    body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        background-color: black;
+        color: teal;
+    }
+    .alert > p{
+        color: brown;
+    }
+
+
+    .authentication__title{
+        text-transform: uppercase;
+        font-size: medium;
+    }
+    .authentication__form--container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border: solid 3px teal;
+        padding: 18px;
+        margin:18px;
+    }
+    .authentication__label{
+        margin-left: 0;
+        text-transform: uppercase;
+        margin-top: 12px;
+    }
+    .authentication__input{
+        border-radius: 12px;
+        height: 36px;
+        background-color: blanchedalmond;
+    }
+    .login__button{
+        color: blanchedalmond;
+        background: teal;
+        border: none;
+        cursor: pointer;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        height: 36px;
+        width: 72px;
+        text-transform: uppercase;
+        font-size: medium;
+    }
+
+    .login__button:hover{
+        background-color: blanchedalmond;
+        color: teal;
+        font-weight: bold;
+    }
+
+    .home__link{
+      text-decoration: none;
+      color: teal;
+            border: #10b981 3px solid;
+
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .dashboard__main{
+        color: blanchedalmond;
+    }
+    .dashboard__header{
+        color: teal;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 80vw;
+        height: 54px;
+        text-transform: uppercase;
+    }
+
+
+
+    .dashboard {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+input, textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background: #4f46e5;
+  color: white;
+}
+
+.btn-secondary {
+  background: #10b981;
+  color: white;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}  .logout__form > button{
+        height: 36px;
+        width: 72px;
+        border: none;
+        border-radius: 6px;
+        text-transform: uppercase;
+        font-size: medium;
+        background-color: orangered;
+        color: blanchedalmond;
+        cursor: pointer;
+    }
+    .logout__form > button:hover{
+        color: orangered;
+        background-color: blanchedalmond;
+        font-weight: bold;
+    }
+    /* =========================================
+       AUTHENTICATION
+       ========================================= */
+
+    .authentication {
+        width: 100%;
+        max-width: 460px;
+        margin: 60px auto;
+        padding: 36px;
+        background: var(--color-surface, #ffffff);
+        border: 1px solid var(--color-border, #e5e7eb);
+        border-radius: var(--radius-lg, 18px);
+        box-shadow: var(--shadow-sm, 0 10px 30px rgba(0, 0, 0, 0.08));
+    }
+
+
+    /* =========================================
+       HEADER
+       ========================================= */
+
+    .authentication__header {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .authentication__title {
+        display: block;
+        margin: 0 0 8px;
+        color: var(--color-text, #111827);
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.2;
+        text-transform: capitalize;
+    }
+
+    .authentication__subtitle {
+        margin: 0;
+        color: var(--color-text-secondary, #6b7280);
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================
+       FORM
+       ========================================= */
+
+    .authentication__form--container {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+    }
+
+    .authentication__field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .authentication__label-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .authentication__label {
+        margin: 0;
+        color: var(--color-text, #111827);
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================
+       INPUTS
+       ========================================= */
+
+    .authentication__input {
+        width: 100%;
+        min-height: 48px;
+        box-sizing: border-box;
+        padding: 0 14px;
+
+        border: 1px solid var(--color-border, #d1d5db);
+        border-radius: 10px;
+
+        background: var(--color-background, #ffffff);
+        color: var(--color-text, #111827);
+
+        font-family: inherit;
+        font-size: 15px;
+
+        outline: none;
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            background-color 0.2s ease;
+    }
+
+    .authentication__input::placeholder {
+        color: var(--color-text-secondary, #9ca3af);
+    }
+
+    .authentication__input:hover {
+        border-color: #b8bec8;
+    }
+
+    .authentication__input:focus {
+        border-color: var(--color-primary, #2563eb);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+
+    /* =========================================
+       LOGIN BUTTON
+       ========================================= */
+
+    .login__button {
+        width: 100%;
+        min-height: 48px;
+        margin-top: 4px;
+
+        border: 0;
+        border-radius: 10px;
+
+        background: var(--color-primary, #2563eb);
+        color: #ffffff;
+
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 600;
+
+        cursor: pointer;
+
+        transition:
+            transform 0.15s ease,
+            box-shadow 0.2s ease,
+            opacity 0.2s ease;
+    }
+
+    .login__button:hover {
+        opacity: 0.94;
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.22);
+    }
+
+    .login__button:active {
+        transform: translateY(1px);
+    }
+
+    .login__button:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, 0.25);
+        outline-offset: 2px;
+    }
+
+
+    /* =========================================
+       FORGOT PASSWORD
+       ========================================= */
+
+    .authentication__forgot {
+        color: var(--color-primary, #2563eb);
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .authentication__forgot:hover {
+        text-decoration: underline;
+    }
+
+
+    /* =========================================
+       FLASH MESSAGES
+       ========================================= */
+
+    .authentication__messages {
+        margin-bottom: 22px;
+    }
+
+    .authentication__flash {
+        padding: 12px 14px;
+        border-radius: 9px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .authentication__flash--danger {
+        border: 1px solid #fecaca;
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+    .authentication__flash--warning {
+        border: 1px solid #fde68a;
+        background: #fffbeb;
+        color: #92400e;
+    }
+
+    .authentication__flash--success {
+        border: 1px solid #bbf7d0;
+        background: #f0fdf4;
+        color: #15803d;
+    }
+
+    .authentication__flash--info {
+        border: 1px solid #bfdbfe;
+        background: #eff6ff;
+        color: #1d4ed8;
+    }
+
+
+    /* =========================================
+       HOME LINK
+       ========================================= */
+
+    .home__link {
+        display: block;
+        width: fit-content;
+        margin: 24px auto 0;
+
+        color: var(--color-text-secondary, #6b7280);
+
+        font-size: 14px;
+        font-weight: 500;
+
+        text-decoration: none;
+
+        transition:
+            color 0.2s ease,
+            transform 0.2s ease;
+    }
+
+    .home__link:hover {
+        color: var(--color-primary, #2563eb);
+        transform: translateX(-2px);
+    }
+
+
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+
+    @media (max-width: 600px) {
+
+        .authentication {
+            max-width: none;
+            margin: 30px 16px;
+            padding: 28px 22px;
+            border-radius: 14px;
+        }
+
+        .authentication__title {
+            font-size: 26px;
+        }
+
+        .authentication__label-row {
+            align-items: flex-start;
+        }
+
+        .authentication__forgot {
+            font-size: 12px;
+        }
+    }
+    .authentication__hint {
+        margin-top: -2px;
+        color: var(--color-text-secondary, #6b7280);
+        font-size: 12px;
+        line-height: 1.5;
+    }
+</style>

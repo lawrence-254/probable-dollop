@@ -1,54 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Verify code · Portfolio{% endblock %}
 
-{%extends "auth/layout.html"%}
-{%block protected%}
+{% block content %}
+<section style="max-width: 480px; margin: 0 auto;">
+  <h1>Verify reset code</h1>
+  <p class="muted">Enter the 6-digit code sent to you.</p>
 
-<div class="auth-container">
+  <div class="card">
+    <form method="post" action="{{ url_for('verify_reset_code') }}">
+      <label for="code">Reset code</label>
+      <input type="text" id="code" name="code" required
+             inputmode="numeric" pattern="[0-9]{6}" maxlength="6"
+             placeholder="123456" autocomplete="one-time-code">
 
-    <h1>Verify Reset Code</h1>
-
-    <p>
-        Enter the 6-digit code sent to your
-        email or phone.
-    </p>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-            <div class="flash {{ category }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endwith %}
-
-    <form method="POST">
-
-        <label for="code">
-            Reset code
-        </label>
-
-        <input
-            id="code"
-            type="text"
-            name="code"
-            inputmode="numeric"
-            pattern="[0-9]{6}"
-            maxlength="6"
-            autocomplete="one-time-code"
-            placeholder="123456"
-            required
-        >
-
-        <button type="submit">
-            Verify Code
-        </button>
-
+      <button type="submit">Verify code</button>
     </form>
 
-    <p>
-        <a href="{{ url_for('forgot_password') }}">
-            Request a new code
-        </a>
+    <p style="margin-top: 1rem;">
+      <a href="{{ url_for('forgot_password') }}">Request a new code</a>
     </p>
-
-</div>
-
+  </div>
+</section>
 {% endblock %}

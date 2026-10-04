@@ -1,35 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.jpeg')}}" type="image/x-icon">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}"/>
-    {% if request.path == url_for('home') %}
-    {% set css_file = 'css/home.css' %}
-    {% elif request.path == url_for('about') %}
-    {% set css_file = 'css/about.css' %}
-    {% elif request.path == url_for('contact') %}
-    {% set css_file = 'css/contact.css' %}
-    {% else %}
-    {% set css_file = 'css/project_view.css' %}
-    {% endif %}
-    <link rel="stylesheet" href="{{ url_for('static', filename=css_file) }}">
-    <title>PORTFOLIO | L. OCHIENG</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Portfolio{% endblock %}</title>
+  <style>
+    :root {
+      /* Core palette */
+      --bg: #0a1a12;              /* Deep British Racing Green black */
+      --card: #0f2419;            /* Slightly lighter racing green */
+      --text: #e8f0e9;            /* Soft off-white */
+      --muted: #8fa896;           /* Tea / sage green */
+      --accent: #d4af37;          /* Classic gold */
+      --accent-hover: #e8c547;    /* Brighter gold */
+      --danger: #c75b5b;
+      --success: #3d9b6e;         /* Rich royal green */
+      --warning: #e6c07b;         /* Soft gold */
+      --info: #7eb8a0;            /* Tea green */
+      --border: #1e3a2f;          /* Dark green border */
+
+      /* Extra supporting colors */
+      --header-bg: #0c1f16;
+      --input-bg: #08140e;
+      --btn-bg: #163528;
+      --btn-hover: #1e4634;
+      --danger-bg: #2a1515;
+      --success-bg: #0f2a1c;
+      --warning-bg: #2a2310;
+      --info-bg: #0f2a22;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+    .container { width: min(1100px, 92%); margin: 0 auto; padding: 1.5rem 0 3rem; }
+
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: var(--header-bg);
+    }
+
+    header.site-header .inner {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+
+    nav { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    label {
+      display: block;
+      margin: 0.75rem 0 0.35rem;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: var(--text);
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.25);
+    }
+
+    textarea { min-height: 110px; resize: vertical; }
+
+    button, .btn {
+      display: inline-block;
+      margin-top: 0.9rem;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--btn-bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    button:hover, .btn:hover {
+      background: var(--btn-hover);
+      border-color: var(--accent);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0a1a12;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .btn-danger {
+      background: var(--danger-bg);
+      border-color: #5a2d35;
+      color: #f0c0c0;
+    }
+
+    .btn-secondary {
+      background: #12251c;
+    }
+
+    .hint, .muted { color: var(--muted); font-size: 0.92rem; }
+
+    .flashes { list-style: none; padding: 0; margin: 0 0 1rem; }
+
+    .flashes li {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .flashes .success {
+      background: var(--success-bg);
+      color: var(--success);
+      border-color: #1e4a32;
+    }
+
+    .flashes .danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border-color: #5a2d35;
+    }
+
+    .flashes .warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border-color: #5a4a1e;
+    }
+
+    .flashes .info {
+      background: var(--info-bg);
+      color: var(--info);
+      border-color: #1e4a3a;
+    }
+
+    .project-thumb {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: var(--input-bg);
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      margin: 0.15rem 0.15rem 0 0;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: #12251c;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    form.inline { display: inline; }
+  </style>
+  {% block head %}{% endblock %}
 </head>
 <body>
-    <header class="header">
-    <a href="{{url_for('add_information')}}" class="hidden__button"></a>
-    <a href="{{ url_for('home')}}" class="logo__link">
-    <h1 >LAWRENCE OCHIENG ODHIAMBO</h1>
-    </a>
-    <nav class="nav">
-        <a href="{{ url_for('home')}}" class="nav__link {{'nav__link--active' if request.path == url_for('home')}}">My Projects</a>
-        <a href="{{ url_for('contact')}}" class="nav__link {{'nav__link--active' if request.path == url_for('contact')}} ">Connect With Me</a>
-        <a href="{{ url_for('about')}}" class="nav__link {{'nav__link--active' if request.path == url_for('about')}}">About Me</a>
-    </nav>
-    </header>
-    {% block content%}
-    {% endblock%}
+  <header class="site-header">
+    <div class="inner">
+      <strong><a href="{{ url_for('home') }}">Lawrence Ochieng Odhiambo</a></strong>
+      <nav>
+          {% if email %}
+            <a href="{{ url_for('add_information') }}">Dashboard</a>
+            <a href="{{ url_for('admin_profile') }}">Profile</a>
+          {% else %}
+            <a href="{{ url_for('login_or_register') }}" style="opacity: 0;">Admin</a>
+          {% endif %}
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
 </body>
 </html>

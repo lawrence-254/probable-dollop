@@ -1,0 +1,97 @@
+{% extends "auth/layout.html" %}
+
+{% block protected %}
+
+<div class="authentication">
+
+    <div class="authentication__header">
+        <h1 class="authentication__title">Admin Login</h1>
+        <p class="authentication__subtitle">
+            Sign in to manage your portfolio.
+        </p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="authentication__messages">
+                {% for category, message in messages %}
+                    <div class="authentication__flash authentication__flash--{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form
+        class="authentication__form--container"
+        method="POST"
+        action="{{ url_for('login_or_register') }}"
+    >
+
+        <div class="authentication__field">
+            <label
+                class="authentication__label"
+                for="email"
+            >
+                Email
+            </label>
+
+            <input
+                class="authentication__input"
+                id="email"
+                type="email"
+                name="email"
+                autocomplete="email"
+                placeholder="Enter your email"
+                required
+            >
+        </div>
+
+        <div class="authentication__field">
+            <div class="authentication__label-row">
+                <label
+                    class="authentication__label"
+                    for="password"
+                >
+                    Password
+                </label>
+
+                <a
+                    class="authentication__forgot"
+                    href="{{ url_for('forgot_password') }}"
+                >
+                    Forgot password?
+                </a>
+            </div>
+
+            <input
+                class="authentication__input"
+                id="password"
+                type="password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+                required
+            >
+        </div>
+
+        <button
+            type="submit"
+            class="login__button"
+        >
+            Login
+        </button>
+
+    </form>
+
+    <a
+        href="{{ url_for('home') }}"
+        class="home__link"
+    >
+        ← Go to home
+    </a>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{%extends "base.html"%}
+{%block content %}
+<main class="main--project__view">
+<div class="">
+    <img class="hero" src="{{url_for('static', filename=project['hero'])}}" alt="{{project['name']}}"/>
+    <article class="project">
+        <article class="project__content">
+            <h2 class="project__heading">{{project['name']}}</h2>
+            <p>
+                <dt>Project Description:</dt>
+                <dd class="project__description">
+                <p>
+                    {{project['description']}}
+                </p>
+                </dd>
+                <a href="{{project['live_site']}}" target="_blank" rel="noopener noreferrer">
+                    view live site
+                </a>
+            </p>
+            <section>
+            <p>
+                <dt>Tech stack used:</dt>
+                {% for category in project.get_categories()%}
+                <dd class="project__category">
+                    {{category}}
+                </dd>
+                {%endfor%}
+            </p>
+            <p>
+            <dt>Aim of the project/Pontential usage:</dt>
+                {% for aim in project.get_aims()%}
+                <dd class="project__category">
+                    {{aim}}
+                </dd>
+                {%endfor%}
+            </p>
+            </section>
+            
+        </article>
+    </article>
+</main>
+{%endblock%}
+

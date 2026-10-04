@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Admin profile · Portfolio{% endblock %}
+
+{% block content %}
+<section style="max-width: 560px;">
+  <p><a href="{{ url_for('add_information') }}">← Back to dashboard</a></p>
+  <h1>Admin profile</h1>
+
+  <div class="card">
+    <h2>Account email</h2>
+    <p><strong>{{ admin.email }}</strong></p>
+    <p class="hint">Email is the login identity and cannot be changed here.</p>
+  </div>
+
+  <div class="card">
+    <h2>Recovery phone</h2>
+    <p class="hint">
+      Used for SMS password reset when Twilio is configured.
+      Prefer E.164 format, e.g. <code>+254712345678</code>.
+    </p>
+    <form method="post" action="{{ url_for('admin_profile') }}">
+      <input type="hidden" name="action" value="update_phone">
+      <label for="phone">Phone number</label>
+      <input type="tel" id="phone" name="phone"
+             value="{{ admin.phone or '' }}"
+             placeholder="+254712345678"
+             autocomplete="tel">
+      <button type="submit">Save phone</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Change password</h2>
+    <form method="post" action="{{ url_for('admin_profile') }}" autocomplete="off">
+      <input type="hidden" name="action" value="change_password">
+
+      <label for="current_password">Current password</label>
+      <input type="password" id="current_password" name="current_password" required
+             autocomplete="current-password">
+
+      <label for="new_password">New password</label>
+      <input type="password" id="new_password" name="new_password" required minlength="8"
+             autocomplete="new-password">
+
+      <label for="confirm_password">Confirm new password</label>
+      <input type="password" id="confirm_password" name="confirm_password" required minlength="8"
+             autocomplete="new-password">
+
+      <button type="submit">Update password</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Session</h2>
+    <form method="post" action="{{ url_for('logout') }}">
+      <button type="submit">Log out</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

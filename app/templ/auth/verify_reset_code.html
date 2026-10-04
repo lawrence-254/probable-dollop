@@ -1,0 +1,54 @@
+
+{%extends "auth/layout.html"%}
+{%block protected%}
+
+<div class="auth-container">
+
+    <h1>Verify Reset Code</h1>
+
+    <p>
+        Enter the 6-digit code sent to your
+        email or phone.
+    </p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <label for="code">
+            Reset code
+        </label>
+
+        <input
+            id="code"
+            type="text"
+            name="code"
+            inputmode="numeric"
+            pattern="[0-9]{6}"
+            maxlength="6"
+            autocomplete="one-time-code"
+            placeholder="123456"
+            required
+        >
+
+        <button type="submit">
+            Verify Code
+        </button>
+
+    </form>
+
+    <p>
+        <a href="{{ url_for('forgot_password') }}">
+            Request a new code
+        </a>
+    </p>
+
+</div>
+
+{% endblock %}

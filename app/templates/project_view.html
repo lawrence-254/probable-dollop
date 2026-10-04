@@ -1,43 +1,60 @@
-{%extends "base.html"%}
-{%block content %}
-<main class="main--project__view">
-<div class="">
-    <img class="hero" src="{{url_for('static', filename=project['hero'])}}" alt="{{project['name']}}"/>
-    <article class="project">
-        <article class="project__content">
-            <h2 class="project__heading">{{project['name']}}</h2>
-            <p>
-                <dt>Project Description:</dt>
-                <dd class="project__description">
-                <p>
-                    {{project['description']}}
-                </p>
-                </dd>
-                <a href="{{project['live_site']}}" target="_blank" rel="noopener noreferrer">
-                    view live site
-                </a>
-            </p>
-            <section>
-            <p>
-                <dt>Tech stack used:</dt>
-                {% for category in project.get_categories()%}
-                <dd class="project__category">
-                    {{category}}
-                </dd>
-                {%endfor%}
-            </p>
-            <p>
-            <dt>Aim of the project/Pontential usage:</dt>
-                {% for aim in project.get_aims()%}
-                <dd class="project__category">
-                    {{aim}}
-                </dd>
-                {%endfor%}
-            </p>
-            </section>
-            
-        </article>
-    </article>
-</main>
-{%endblock%}
+{% extends "base.html" %}
+{% block title %}{{ project.name }} · Portfolio{% endblock %}
 
+{% block content %}
+<article>
+  <p><a href="{{ url_for('home') }}">← All projects</a></p>
+
+  <h1>{{ project.name }}</h1>
+
+  {% if project.hero %}
+    <img
+      src="{{ url_for('static', filename=project.hero) }}"
+      alt="{{ project.name }} hero"
+      style="width:100%; max-height:420px; object-fit:cover; border-radius:12px; margin:1rem 0;"
+    >
+  {% elif project.thumb %}
+    <img
+      src="{{ url_for('static', filename=project.thumb) }}"
+      alt="{{ project.name }}"
+      style="width:100%; max-height:320px; object-fit:cover; border-radius:12px; margin:1rem 0;"
+    >
+  {% endif %}
+
+  {% if project.get_categories() %}
+    <div class="card">
+      <h2>Stack / categories</h2>
+      {% for cat in project.get_categories() %}
+        <span class="chip">{{ cat }}</span>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if project.description %}
+    <div class="card">
+      <h2>Description</h2>
+      <p style="white-space: pre-wrap;">{{ project.description }}</p>
+    </div>
+  {% endif %}
+
+  {% if project.get_aims() %}
+    <div class="card">
+      <h2>Aims</h2>
+      <ul>
+        {% for aim in project.get_aims() %}
+          <li>{{ aim }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <div class="actions">
+    {% if project.live_site %}
+      <a class="btn" href="{{ project.live_site }}" target="_blank" rel="noopener noreferrer">Live site</a>
+    {% endif %}
+    {% if project.preview_video_link %}
+      <a class="btn btn-secondary" href="{{ project.preview_video_link }}" target="_blank" rel="noopener noreferrer">Preview video</a>
+    {% endif %}
+  </div>
+</article>
+{% endblock %}

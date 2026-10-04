@@ -1,23 +1,43 @@
 {% extends "base.html" %}
+{% block title %}Home · Portfolio{% endblock %}
 
-{%block content %}
-<main class="main--home">
-    <section class="projects">
-        {%for project in projects %}
-        <a class="single-project__link" href="{{url_for('project_detail', slug=project['slug'])}}">
-            <article class="project--card">
-                <img class="project--card__image" src="{{url_for('static', filename=project['thumb'])}}" alt="{{project['name']}} image"/> 
-                <header class="project--card__meta">
-                    <ul class="meta__categories">
-                        {% for category in project.get_categories()%}
-                        <li class="single__category">{{category}}</li>
-                        {%endfor%}
-                    </ul>
-                    <h2 class="meta__name">{{project['name']}}</h2>
-                </header>
-            </article>
-        </a>
-        {%endfor%}
-    </section>
-</main>
-{%endblock%}
+{% block content %}
+<section>
+  <h1>Projects</h1>
+  <p class="muted">Selected projects {% if email %}
+           <a href="{{ url_for('add_information') }}">Dashboard</a>
+           <a href="{{ url_for('admin_profile') }}">Profile</a>
+         {% else %}
+           <a href="{{ url_for('login_or_register') }}" style="opacity: 0;">Admin</a>
+         {% endif %}</p>
+
+  {% if projects %}
+    <div class="grid">
+      {% for project in projects %}
+        <article class="card">
+          {% if project.thumb %}
+            <img class="project-thumb" src="{{ url_for('static', filename=project.thumb) }}" alt="{{ project.name }}">
+          {% endif %}
+          <h2 style="margin: 0.75rem 0 0.35rem; font-size: 1.15rem;">
+            <a href="{{ url_for('project_detail', slug=project.slug) }}">{{ project.name }}</a>
+          </h2>
+          {% if project.get_categories() %}
+            <div>
+              {% for cat in project.get_categories() %}
+                <span class="chip">{{ cat }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if project.description %}
+            <p class="muted">{{ project.description[:140] }}{% if project.description|length > 140 %}…{% endif %}</p>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card">
+      <p class="muted">No projects yet.</p>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,108 +1,107 @@
-{% extends "auth/layout.html" %}
+{% extends "base.html" %}
+{% block title %}Dashboard · Portfolio{% endblock %}
 
-{% block protected %}
-<main class="dashboard">
+{% block content %}
+<section>
+  <div class="actions" style="justify-content: space-between; margin-bottom: 1rem;">
+    <h1 style="margin: 0;">Admin dashboard</h1>
+    <div class="actions">
+      <a class="btn btn-secondary" href="{{ url_for('admin_profile') }}">Profile</a>
+      <form class="inline" method="post" action="{{ url_for('logout') }}">
+        <button type="submit">Log out</button>
+      </form>
+    </div>
+  </div>
 
-    <!-- HEADER -->
-    <header class="dashboard__header">
-        <h2>Edit and add information to your portfolio</h2>
+  {% if admin %}
+    <p class="muted">Signed in as <strong>{{ admin.email }}</strong></p>
+  {% endif %}
 
-        <form method="POST" class="logout__form">
-            <input type="hidden" name="logout" value="">
-            <button type="submit" name="logout_button" class="">
-                Logout
-            </button>
-        </form>
-    </header>
+  {# ---- Add project ---- #}
+  <div class="card">
+    <h2>Add project</h2>
+    <form method="post" action="{{ url_for('add_information') }}" enctype="multipart/form-data">
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" required>
 
-    <!-- ADD PROJECT -->
-    <section class="card">
-        <h3>Add Project</h3>
+      <label for="tech">Categories / stack (comma-separated)</label>
+      <input type="text" id="tech" name="tech" placeholder="Flask, SQLAlchemy, CSS">
 
-        <form method="POST" enctype="multipart/form-data" class="form">
+      <label for="description">Description</label>
+      <textarea id="description" name="description"></textarea>
 
-            <div class="form-group">
-                <label for="title">Project Title</label>
-                <input type="text" name="title" id="title" required>
-            </div>
+      <label for="aim">Aims (comma-separated)</label>
+      <input type="text" id="aim" name="aim" placeholder="Learn X, Ship Y">
 
-            <div class="form-group">
-                <label for="live_link">Live Link URL</label>
-                <input type="url" id="live_link" name="live_link">
-            </div>
+      <label for="live_link">Live site URL</label>
+      <input type="url" id="live_link" name="live_link" placeholder="https://">
 
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" rows="4"></textarea>
-            </div>
+      <label for="video_link">Preview video URL</label>
+      <input type="url" id="video_link" name="video_link" placeholder="https://">
 
-            <div class="form-group">
-                <label for="aim">Project Aims (comma separated)</label>
-                <input type="text" name="aim" id="aim" placeholder="e.g build system, solve X problem">
-            </div>
+      <label for="thumbnail">Thumbnail image</label>
+      <input type="file" id="thumbnail" name="thumbnail" accept=".png,.jpg,.jpeg,.gif,.webp,image/*">
 
-            <div class="form-group">
-                <label for="tech">Tech Stack (comma separated)</label>
-                <input type="text" id="tech" name="tech" placeholder="python, flask, react">
-            </div>
+      <label for="hero">Hero image</label>
+      <input type="file" id="hero" name="hero" accept=".png,.jpg,.jpeg,.gif,.webp,image/*">
 
-            <div class="form-group">
-                <label for="thumbnail">Thumbnail</label>
-                <input type="file" name="thumbnail" id="thumbnail">
-            </div>
+      <button type="submit" name="add_project_button">Add project</button>
+    </form>
+  </div>
 
-            <div class="form-group">
-                <label for="hero">Hero Image</label>
-                <input type="file" name="hero" id="hero">
-            </div>
-            <div class="form-group">
-                <label for="video_link">Project preview video link</label>
-                <input type="url" id="video_link" name="video_link">
-            </div>
+  {# ---- Existing projects ---- #}
+  <div class="card">
+    <h2>Projects</h2>
+    {% if projects %}
+      {% for project in projects %}
+        <div style="border-top: 1px solid var(--border); padding: 1rem 0;">
+          <strong>{{ project.name }}</strong>
+          <span class="muted"> · /project/{{ project.slug }}/</span>
+          <div class="actions" style="margin-top: 0.5rem;">
+            <a class="btn btn-secondary" href="{{ url_for('project_detail', slug=project.slug) }}">View</a>
+            <a class="btn" href="{{ url_for('edit_project', project_id=project.id) }}">Edit</a>
+            <form class="inline" method="post"
+                  action="{{ url_for('delete_project', project_id=project.id) }}"
+                  onsubmit="return confirm('Delete this project?');">
+              <button class="btn-danger" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="muted">No projects yet.</p>
+    {% endif %}
+  </div>
 
-            <button type="submit" name="add_project_button" class="btn btn-primary">
-                Add Project
-            </button>
+  {# ---- About / CV ---- #}
+  <div class="card">
+    <h2>About / CV</h2>
+    <form method="post" action="{{ url_for('add_information') }}" enctype="multipart/form-data">
+      <label for="bio">Bio</label>
+      <textarea id="bio" name="bio">{{ about.bio if about and about.bio else '' }}</textarea>
 
-        </form>
-    </section>
+      <label for="techstack_used_extensively">Tech used extensively (comma-separated)</label>
+      <input type="text" id="techstack_used_extensively" name="techstack_used_extensively"
+             value="{% if about %}{{ about.get_techstack()|join(', ') }}{% endif %}">
 
-    <!-- EDIT ABOUT -->
-    <section class="card">
-        <h3>Edit Your Information</h3>
+      <label for="familiar_techstack">Familiar technologies (comma-separated)</label>
+      <input type="text" id="familiar_techstack" name="familiar_techstack"
+             value="{% if about %}{{ about.get_familiar()|join(', ') }}{% endif %}">
 
-        <form method="POST" enctype="multipart/form-data" class="form">
+      <label for="interested_in_techstack">Interested in learning (comma-separated)</label>
+      <input type="text" id="interested_in_techstack" name="interested_in_techstack"
+             value="{% if about %}{{ about.get_future()|join(', ') }}{% endif %}">
 
-            <div class="form-group">
-                <label for="bio">Bio</label>
-                <textarea name="bio" id="bio" rows="4"></textarea>
-            </div>
+      <label for="cv">CV (PDF only)</label>
+      <input type="file" id="cv" name="cv" accept=".pdf,application/pdf">
+      {% if about and about.cv %}
+        <p class="hint">Current CV on file.
+          <a href="{{ url_for('download_cv') }}">Download</a>
+        </p>
+      {% endif %}
 
-            <div class="form-group">
-                <label for="techstack_used_extensively">Tech You Use Extensively</label>
-                <input type="text" placeholder="python, flask, sql" name="techstack_used_extensively" id="techstack_used_extensively">
-            </div>
-
-            <div class="form-group">
-                <label for="familiar_techstack">Familiar Tech Stack</label>
-                <input type="text" placeholder="python, flask, sql" name="familiar_techstack" id="familiar_techstack">
-            </div>
-
-            <div class="form-group">
-                <label for="interested_in_techstack">Tech of Interest</label>
-                <input type="text" placeholder="python, flask, sql" id="interested_in_techstack" name="interested_in_techstack">
-            </div>
-            <div class="form-group">
-                <label for="cv">cv</label>
-                <input type="file" name="cv" id="cv">
-            </div>
-
-            <button type="submit" name="edit_about_button" class="btn btn-secondary">
-                Save Changes
-            </button>
-
-        </form>
-    </section>
-
-</main>
+      <button type="submit" name="edit_about_button">Save about</button>
+    </form>
+  </div>
+</section>
 {% endblock %}

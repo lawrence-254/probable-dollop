@@ -1,44 +1,58 @@
 {% extends "base.html" %}
+{% block title %}About · Portfolio{% endblock %}
 
 {% block content %}
-<main class="main--about">
-    <div class="about-bio">
-        {{ portfolio_about.bio | safe }}
+<section>
+  <h1>About</h1>
+
+  {% if portfolio_about %}
+    <div class="card">
+      <h2>Bio</h2>
+      <p>{{ portfolio_about.bio or "No bio yet." }}</p>
     </div>
 
-    <div class="tech-sections">
-        <section class="tech-section">
-            <h3>My Tech Stack</h3>
-            <ul class="tech-list">
-                {% for tech in portfolio_about.get_techstack() %}
-                <li>{{ tech }}</li>
-                {% endfor %}
-            </ul>
-        </section>
-
-        <section class="tech-section">
-            <h3>Familiar With</h3>
-            <ul class="tech-list">
-                {% for tech in portfolio_about.get_familiar() %}
-                <li>{{ tech }}</li>
-                {% endfor %}
-            </ul>
-        </section>
-
-        <section class="tech-section">
-            <h3>Interested In</h3>
-            <ul class="tech-list">
-                {% for tech in portfolio_about.get_future() %}
-                <li>{{ tech }}</li>
-                {% endfor %}
-            </ul>
-        </section>
+    <div class="card">
+      <h2>Tech used extensively</h2>
+      {% if portfolio_about.get_techstack() %}
+        {% for item in portfolio_about.get_techstack() %}
+          <span class="chip">{{ item }}</span>
+        {% endfor %}
+      {% else %}
+        <p class="muted">None listed.</p>
+      {% endif %}
     </div>
 
-    <div class="cv__details">
-        <a href="{{ url_for('download_cv') }}" class="cv__download btn btn-primary">
-            ↓ Download CV (PDF)
-        </a>
+    <div class="card">
+      <h2>Familiar technologies</h2>
+      {% if portfolio_about.get_familiar() %}
+        {% for item in portfolio_about.get_familiar() %}
+          <span class="chip">{{ item }}</span>
+        {% endfor %}
+      {% else %}
+        <p class="muted">None listed.</p>
+      {% endif %}
     </div>
-</main>
+
+    <div class="card">
+      <h2>Interested in learning</h2>
+      {% if portfolio_about.get_future() %}
+        {% for item in portfolio_about.get_future() %}
+          <span class="chip">{{ item }}</span>
+        {% endfor %}
+      {% else %}
+        <p class="muted">None listed.</p>
+      {% endif %}
+    </div>
+
+    {% if portfolio_about.cv %}
+      <p>
+        <a class="btn" href="{{ url_for('download_cv') }}">Download CV (PDF)</a>
+      </p>
+    {% endif %}
+  {% else %}
+    <div class="card">
+      <p class="muted">About information has not been added yet.</p>
+    </div>
+  {% endif %}
+</section>
 {% endblock %}
