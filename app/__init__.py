@@ -127,7 +127,7 @@ app.config.update(
     SECRET_KEY=SECRET_KEY,
     SQLALCHEMY_DATABASE_URI=(
         os.getenv("DATABASE_URL", "").strip()
-        or f"sqlite:///{BASEDIR / 'app.db'}"
+        or f"postgresql+psycopg://lawrence:spaniel254@localhost:5432/lawrence"
     ),
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
     UPLOAD_FOLDER=str(UPLOAD_FOLDER),
